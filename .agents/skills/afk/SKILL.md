@@ -143,7 +143,7 @@ herdr - both literal, non-submitting sends), then submitted with Enter and
 **verified** through the selected backend's submit primitive.
 Enter is retried (Enter only, never a retype) until the backend confirms the
 submit landed.
-A failed delivery is logged with its stage (the initial send, which types nothing and retries no Enter, or Enter confirmation), the payload's byte count, and the transport's own error output.
+A failed delivery is logged with its stage (initial send or Enter delivery, where no confirmation retry ran and the text may already be typed on backends such as herdr whose Enter could not be sent, or Enter confirmation), the payload's byte count, and the transport's own error output.
 For tmux that confirmation is normally a proven cleared composer from the shared classifier; an idle baseline transitioning to busy across this submit's own Enter also confirms that the turn started when a working harness hides its composer.
 Without that baseline, busy state never converts an `unknown` composer into confirmation.
 For herdr, idle-baseline submits first seek native agent-state showing a real turn started, then use the shared classifier when native state remains idle: a cleared composer confirms delivery, while pending text retries Enter and reaches the shared busy-queue verdict only after the retry budget.

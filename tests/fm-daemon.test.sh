@@ -2215,9 +2215,9 @@ test_inject_send_failure_logs_stage_stderr_and_bytes() {
     FM_FAKE_SEND_MAX_BYTES=100 FM_INJECT_CONFIRM_SLEEP=0.05 escalate_flush "$state"; then
     fail "escalate_flush reported success although the transport refused the send"
   fi
-  grep -E 'inject failed at initial send \(verdict=send-failed, bytes=[0-9]+\): command too long' "$log" >/dev/null \
+  grep -E 'inject failed at initial send or Enter delivery \(verdict=send-failed, bytes=[0-9]+;[^)]*\): command too long' "$log" >/dev/null \
     || fail "send failure did not log its stage, byte count, and transport stderr: $(cat "$log")"
-  if grep -F 'may be in composer' "$log" >/dev/null; then
+  if grep -F 'Enter confirmation' "$log" >/dev/null; then
     fail "an initial-send failure was reported as an Enter-confirmation failure: $(cat "$log")"
   fi
   [ ! -s "$sent" ] || fail "nothing may be typed when the initial send fails"

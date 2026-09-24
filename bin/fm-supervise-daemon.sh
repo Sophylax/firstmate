@@ -736,12 +736,11 @@ _utf8_prefix() {  # <text> <max-bytes> <out-var>
 # ESCALATE_ITEM_BYTES at a UTF-8 boundary with an omitted-bytes marker, the
 # joined items stop at ESCALATE_DIGEST_BYTES with a "+K more event(s)" tail,
 # and a bounded digest names a full-text file under ESCALATE_FULL_DIR that
-# keeps every buffered item verbatim for ESCALATE_FULL_KEEP_DAYS.
+# keeps every buffered item verbatim.
 ESCALATE_DIGEST_BYTES=8192
 ESCALATE_ITEM_BYTES=2048
 ESCALATE_ITEM_MIN_BYTES=128
 ESCALATE_FULL_DIR=.subsuper-digests
-ESCALATE_FULL_KEEP_DAYS=7
 
 # escalate_digest_body: join <buf>'s items with " | " inside the byte budget.
 # Sets ESCALATE_BODY, ESCALATE_EVENTS (every buffered item), and
@@ -772,12 +771,11 @@ escalate_digest_body() {  # <buf>
 }
 
 # escalate_full_text_save: copy <buf> verbatim into a new full-text file and
-# print its path, pruning files older than ESCALATE_FULL_KEEP_DAYS first.
+# print its path.
 escalate_full_text_save() {  # <state> <buf>
   local state=$1 buf=$2 dir file
   dir="$state/$ESCALATE_FULL_DIR"
   mkdir -p "$dir" 2>/dev/null || return 1
-  find "$dir" -type f -name 'digest-*' -mtime +"$ESCALATE_FULL_KEEP_DAYS" -exec rm -f {} + 2>/dev/null || true
   file=$(mktemp "$dir/digest-$(date '+%Y%m%dT%H%M%S').XXXXXX" 2>/dev/null) || return 1
   if ! cp "$buf" "$file" 2>/dev/null; then
     rm -f "$file"
@@ -1399,9 +1397,9 @@ inject_msg() {  # <message> [state]
   # backend=tmux this calls fm_backend_tmux_send_text_submit, a verbatim
   # re-export of fm_tmux_submit_core - byte-identical to calling it directly.
   # The transport's stderr is kept so a failure names its cause. send-failed
-  # means the text was never confirmed typed (or no Enter could be sent), so
-  # no confirmation retry ran; every other non-empty verdict is an
-  # Enter-confirmation failure.
+  # means the text was never confirmed typed, or (herdr) it was typed but no
+  # Enter could be sent, so no confirmation retry ran; every other non-empty
+  # verdict is an Enter-confirmation failure.
   retries=${FM_INJECT_CONFIRM_RETRIES:-$INJECT_CONFIRM_RETRIES_DEFAULT}
   sleep_s=${FM_INJECT_CONFIRM_SLEEP:-$INJECT_CONFIRM_SLEEP_DEFAULT}
   bytes=$(LC_ALL=C; printf '%s' "${#msg}")
@@ -1417,7 +1415,7 @@ inject_msg() {  # <message> [state]
   err=$(_collapse_newlines "$err")
   _utf8_prefix "$err" 512 err
   if [ "$verdict" = send-failed ]; then
-    INJECT_LAST_FAILURE="initial send (verdict=send-failed, bytes=$bytes): ${err:-no transport error output}"
+    INJECT_LAST_FAILURE="initial send or Enter delivery (verdict=send-failed, bytes=$bytes; text may be in composer on backends that typed before Enter failed): ${err:-no transport error output}"
   else
     INJECT_LAST_FAILURE="Enter confirmation: submit unconfirmed after $retries retries (verdict=${verdict:-none}, bytes=$bytes, text may be in composer)${err:+: $err}"
   fi
