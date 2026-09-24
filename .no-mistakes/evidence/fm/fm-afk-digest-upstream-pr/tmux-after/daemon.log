@@ -1,0 +1,2 @@
+[2026-09-24T20:12:09+0300] daemon starting (pid 3022918); target=%0; target_source=FM_SUPERVISOR_TARGET; backend=tmux; backend_source=FM_SUPERVISOR_BACKEND; afk=on; inject_skip='heartbeat'; stale_escalate=999999s; batch=0s
+[2026-09-24T20:13:02+0300] wake: signal: /tmp/fm-afk-digest-live.S9hQ4M/secondmate-alpha.status /tmp/fm-afk-digest-live.S9hQ4M/secondmate-bravo.status /tmp/fm-afk-digest-live.S9hQ4M/secondmate-charlie.status

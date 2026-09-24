@@ -1,0 +1,2 @@
+[2026-09-24T20:21:15+0300] inject failed at initial send or Enter delivery (verdict=send-failed, bytes=50058; text may be in composer on backends that typed before Enter failed): command too long
+inject_msg rc=1

@@ -1,0 +1,29 @@
+[2026-09-24T20:19:54+0300] daemon starting (pid 3255806); target=%0; target_source=FM_SUPERVISOR_TARGET; backend=tmux; backend_source=FM_SUPERVISOR_BACKEND; afk=on; inject_skip='heartbeat'; stale_escalate=999999s; batch=0s
+[2026-09-24T20:20:02+0300] inject failed at Enter confirmation: submit unconfirmed after 3 retries (verdict=pending, bytes=4379, text may be in composer)
+[2026-09-24T20:20:04+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:04+0300] wake: signal: /tmp/fm-afk-stage-live.RIjXg5/secondmate-alpha.status /tmp/fm-afk-stage-live.RIjXg5/secondmate-bravo.status
+[2026-09-24T20:20:11+0300] self-handle: signal: /tmp/fm-afk-stage-live.RIjXg5/secondmate-alpha.status /tmp/fm-afk-stage-live.RIjXg5/secondmate-bravo.status -> signal already escalated (catch-all scan): secondmate-alpha.status: done: secondmate-alpha shipped fix 150, PR https://github.com/example/repo/pull/150 merged | secondmate-bravo.status: done: secondmate-bravo shipped fix 150, PR https://github.com/example/repo/pull/150 merged
+[2026-09-24T20:20:11+0300] self-handle: signal: /tmp/fm-afk-stage-live.RIjXg5/secondmate-alpha.status /tmp/fm-afk-stage-live.RIjXg5/secondmate-bravo.status -> signal already escalated (catch-all scan): secondmate-alpha.status: done: secondmate-alpha shipped fix 150, PR https://github.com/example/repo/pull/150 merged | secondmate-bravo.status: done: secondmate-bravo shipped fix 150, PR https://github.com/example/repo/pull/150 merged
+[2026-09-24T20:20:14+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:15+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:15+0300] ERROR: away-mode escalation undelivered 18s; last delivery failure: deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane). Buffer + wake-queue preserved; alarm marker written.
+[2026-09-24T20:20:17+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:20+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:22+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:25+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:27+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:29+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:32+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:32+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:32+0300] ERROR: away-mode escalation undelivered 36s; last delivery failure: deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane). Buffer + wake-queue preserved; alarm marker written.
+[2026-09-24T20:20:35+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:37+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:39+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:41+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:44+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:46+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:48+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:49+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:49+0300] ERROR: away-mode escalation undelivered 52s; last delivery failure: deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane). Buffer + wake-queue preserved; alarm marker written.
+[2026-09-24T20:20:51+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)
+[2026-09-24T20:20:54+0300] inject deferred: supervisor composer not confirmed-empty (state=pending: pending input, dead-shell prompt, or unreadable pane)

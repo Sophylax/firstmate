@@ -1,0 +1,3 @@
+buffer bytes: 0
+total 236
+-rw------- 1 sophylax sophylax 240347 Sep 24 20:12 digest-20260924T201250.6XQ1Km

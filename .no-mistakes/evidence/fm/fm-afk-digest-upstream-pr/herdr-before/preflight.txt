@@ -1,0 +1,2 @@
+composer state before tests: empty
+composer state after direct: empty

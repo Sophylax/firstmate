@@ -1,0 +1,2 @@
+[2026-09-24T20:16:14+0300] daemon starting (pid 3142340); target=fm-lab-afkdigest-3139991-27162:w1:p2; target_source=FM_SUPERVISOR_TARGET; backend=herdr; backend_source=FM_SUPERVISOR_BACKEND; afk=on; inject_skip='heartbeat'; stale_escalate=999999s; batch=0s
+[2026-09-24T20:17:09+0300] wake: signal: /tmp/fm-afk-herdr-digest.eaEA33/secondmate-alpha.status /tmp/fm-afk-herdr-digest.eaEA33/secondmate-bravo.status /tmp/fm-afk-herdr-digest.eaEA33/secondmate-charlie.status

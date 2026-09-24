@@ -1,0 +1,8 @@
+[2026-09-24T20:17:55+0300] daemon starting (pid 3197998); target=fm-lab-afkdigest-3196149-23646:w1:p2; target_source=FM_SUPERVISOR_TARGET; backend=herdr; backend_source=FM_SUPERVISOR_BACKEND; afk=on; inject_skip='heartbeat'; stale_escalate=999999s; batch=0s
+[2026-09-24T20:18:37+0300] inject failed: submit unconfirmed after 6 retries (verdict=send-failed, text may be in composer)
+[2026-09-24T20:18:38+0300] inject failed: submit unconfirmed after 6 retries (verdict=send-failed, text may be in composer)
+[2026-09-24T20:18:38+0300] ERROR: away-mode escalation undelivered 33s; inject could not confirm a submit (supervisor pane busy or wedged). Buffer + wake-queue preserved; alarm marker written.
+[2026-09-24T20:18:42+0300] inject failed: submit unconfirmed after 6 retries (verdict=send-failed, text may be in composer)
+[2026-09-24T20:18:45+0300] inject failed: submit unconfirmed after 6 retries (verdict=send-failed, text may be in composer)
+[2026-09-24T20:18:47+0300] inject failed: submit unconfirmed after 6 retries (verdict=send-failed, text may be in composer)
+[2026-09-24T20:18:48+0300] wake: signal: /tmp/fm-afk-herdr-digest.6NcIUS/secondmate-alpha.status /tmp/fm-afk-herdr-digest.6NcIUS/secondmate-bravo.status /tmp/fm-afk-herdr-digest.6NcIUS/secondmate-charlie.status

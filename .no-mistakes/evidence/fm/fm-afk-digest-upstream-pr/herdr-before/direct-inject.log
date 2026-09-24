@@ -1,0 +1,2 @@
+[2026-09-24T20:17:54+0300] inject failed: submit unconfirmed after 3 retries (verdict=send-failed, text may be in composer)
+inject_msg rc=1

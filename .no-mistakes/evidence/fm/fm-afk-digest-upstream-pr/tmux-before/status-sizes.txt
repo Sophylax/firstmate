@@ -1,0 +1,4 @@
+ 78184 /tmp/fm-afk-digest-live.dYpxwd/secondmate-alpha.status
+ 78184 /tmp/fm-afk-digest-live.dYpxwd/secondmate-bravo.status
+ 79655 /tmp/fm-afk-digest-live.dYpxwd/secondmate-charlie.status
+236023 total

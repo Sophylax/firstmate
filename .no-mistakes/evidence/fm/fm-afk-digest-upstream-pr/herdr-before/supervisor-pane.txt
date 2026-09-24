@@ -1,0 +1,3 @@
+sophylax@DESKTOP-BAVFD0J:/tmp$ bash '/tmp/fm-afk-herdr-digest.6NcIUS/loop.sh' '/tmp/fm-afk-herdr-digest.6NcIUS/submitted
+.log'
+❯

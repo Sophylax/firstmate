@@ -1,0 +1,4 @@
+ 78184 /tmp/fm-afk-herdr-digest.6NcIUS/secondmate-alpha.status
+ 78184 /tmp/fm-afk-herdr-digest.6NcIUS/secondmate-bravo.status
+ 79655 /tmp/fm-afk-herdr-digest.6NcIUS/secondmate-charlie.status
+236023 total

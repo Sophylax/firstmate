@@ -1,0 +1,2 @@
+[2026-09-24T20:16:13+0300] inject failed at initial send or Enter delivery (verdict=send-failed, bytes=200058; text may be in composer on backends that typed before Enter failed): /home/sophylax/.no-mistakes/worktrees/bb0613bdcbd3/01M3A59VEZ8CECAF4RPSHJXEMT/bin/backends/herdr.sh: line 403: /home/sophylax/.local/bin/herdr: Argument list too long
+inject_msg rc=1
