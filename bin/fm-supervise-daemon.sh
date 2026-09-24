@@ -219,6 +219,8 @@ WEDGE_ALARM_LAST_EPOCH=0
 WEDGE_ALARM_NOTIFIER_PID=
 # Why the latest delivery attempt did not land; the wedge alarm reports it.
 INJECT_LAST_FAILURE=
+# 1 once the latest delivery attempt reached the submit primitive.
+INJECT_SUBMIT_ATTEMPTED=0
 # The captain-relevant verb set and the status classifiers (last_status_line,
 # status_is_captain_relevant, window_to_task, and the status-span reader) now
 # live in bin/fm-classify-lib.sh, shared with the always-on watcher.
@@ -787,9 +789,12 @@ escalate_full_text_save() {  # <state> <buf>
 # Flush the escalation buffer as ONE batched, single-line, bounded digest to
 # the supervisor pane. Returns 0 on successful inject (or empty buffer),
 # non-zero on inject failure (buffer preserved for retry / catch-up). A bounded
-# digest's full-text file is kept only when the inject succeeds.
+# digest's full-text file is kept once the submit ran, because the digest naming
+# it may have been typed; ESCALATE_KEPT_FULL remembers it so a retry of the same
+# buffer reuses it instead of writing another copy.
+ESCALATE_KEPT_FULL=
 escalate_flush() {  # <state>
-  local state=$1 buf msg full=''
+  local state=$1 buf msg full='' fresh=0
   buf="$state/.subsuper-escalations"
   [ -s "$buf" ] || return 0
   if [ ! -f "$buf" ] || [ ! -r "$buf" ]; then
@@ -800,7 +805,11 @@ escalate_flush() {  # <state>
   escalate_digest_body "$buf"
   msg=$ESCALATE_BODY
   if [ "$ESCALATE_BOUNDED" -eq 1 ]; then
-    if ! full=$(escalate_full_text_save "$state" "$buf"); then
+    if [ -n "$ESCALATE_KEPT_FULL" ] && cmp -s "$ESCALATE_KEPT_FULL" "$buf"; then
+      full=$ESCALATE_KEPT_FULL
+    elif full=$(escalate_full_text_save "$state" "$buf"); then
+      fresh=1
+    else
       INJECT_LAST_FAILURE="digest full text could not be saved under $state/$ESCALATE_FULL_DIR"
       log "inject skipped: $INJECT_LAST_FAILURE; buffer preserved"
       return 1
@@ -810,8 +819,16 @@ escalate_flush() {  # <state>
   # Single-line wrapper: no embedded newlines (inject_msg also collapses as a
   # safety net, but keeping the source single-line makes the intent explicit).
   msg=$(printf 'Supervisor escalate (%s event(s)): %s (pre-read; re-arm not needed — watcher daemon-managed)' "$ESCALATE_EVENTS" "$msg")
-  if inject_msg "$msg" "$state"; then : > "$buf"; rm -f "${buf}.since" "$state/.subsuper-inject-wedged"; return 0; fi
-  [ -z "$full" ] || rm -f "$full"
+  if inject_msg "$msg" "$state"; then
+    : > "$buf"; rm -f "${buf}.since" "$state/.subsuper-inject-wedged"
+    ESCALATE_KEPT_FULL=
+    return 0
+  fi
+  if [ "$INJECT_SUBMIT_ATTEMPTED" = 1 ]; then
+    [ -z "$full" ] || ESCALATE_KEPT_FULL=$full
+  elif [ "$fresh" = 1 ]; then
+    rm -f "$full"
+  fi
   return 1
 }
 
@@ -1350,6 +1367,7 @@ inject_msg() {  # <message> [state]
   # daemon self-handles and stays quiet; firstmate drives the normal always-on
   # watcher triage. Escalations buffer and survive for the next catch-up flush.
   INJECT_LAST_FAILURE=
+  INJECT_SUBMIT_ATTEMPTED=0
   afk_active "$state" || { INJECT_LAST_FAILURE="deferred: afk inactive"; log "inject $INJECT_LAST_FAILURE"; return 1; }
   # (2) Single-line digest: collapse any embedded newlines so submission via
   # send-keys + Enter is unambiguous regardless of how the TUI composer treats
@@ -1404,6 +1422,7 @@ inject_msg() {  # <message> [state]
   sleep_s=${FM_INJECT_CONFIRM_SLEEP:-$INJECT_CONFIRM_SLEEP_DEFAULT}
   bytes=$(LC_ALL=C; printf '%s' "${#msg}")
   errf=$(mktemp "$state/.subsuper-inject-err.XXXXXX" 2>/dev/null) || errf=
+  INJECT_SUBMIT_ATTEMPTED=1
   verdict=$(fm_backend_send_text_submit "$backend" "$target" "$msg" "$retries" "$sleep_s" "$sleep_s" 2>"${errf:-/dev/null}")
   if [ -n "$errf" ]; then
     err=$(cat "$errf" 2>/dev/null)

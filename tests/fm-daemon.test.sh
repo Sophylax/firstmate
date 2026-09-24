@@ -2222,9 +2222,12 @@ test_inject_send_failure_logs_stage_stderr_and_bytes() {
   fi
   [ ! -s "$sent" ] || fail "nothing may be typed when the initial send fails"
   cmp -s "$state/.subsuper-escalations" "$dir/buffer.orig" || fail "buffer changed after a failed send"
-  if [ -n "$(ls -A "$state/.subsuper-digests" 2>/dev/null)" ]; then
-    fail "an undelivered digest left a full-text file behind"
+  if LOG="$log" PATH="$fakebin:$PATH" FM_FAKE_COMPOSER="$dir/composer" FM_FAKE_SENT="$sent" \
+    FM_FAKE_SEND_MAX_BYTES=100 FM_INJECT_CONFIRM_SLEEP=0.05 escalate_flush "$state"; then
+    fail "escalate_flush reported success on a retried refused send"
   fi
+  [ "$(ls -A "$state/.subsuper-digests" | wc -l | tr -d ' ')" -eq 1 ] \
+    || fail "retrying an unchanged buffer must reuse one full-text file: $(ls -A "$state/.subsuper-digests")"
   WEDGE_ALARM_LAST_EPOCH=0
   LOG="$log" FM_WEDGE_ALARM_CHANNEL=off FM_SUPERVISOR_BACKEND=herdr inject_wedge_alarm "$state" 600
   grep -E 'ERROR: away-mode escalation undelivered 600s; last delivery failure: initial send .*command too long' "$log" >/dev/null \
@@ -2253,6 +2256,41 @@ test_inject_enter_failure_logs_confirmation_stage() {
     fail "an Enter-confirmation failure was reported as an initial-send failure"
   fi
   pass "an Enter-confirmation failure logs its own stage and byte count"
+}
+
+test_bounded_digest_full_text_kept_after_typing() {
+  local dir state fakebin sent log item digest full
+  dir=$(make_bordered_case digest-kept-after-typing)
+  state="$dir/state"; fakebin="$dir/fakebin"; log="$dir/daemon.log"
+  sent="$dir/sent.log"; : > "$sent"
+  touch "$dir/.swallow"
+  item="secondmate-c.status: "
+  while [ "${#item}" -lt 5000 ]; do item+="blocked: waiting on review ; "; done
+  escalate_add "$state" "$item"
+  cp "$state/.subsuper-escalations" "$dir/buffer.orig"
+  afk_enter "$state"
+  if LOG="$log" PATH="$fakebin:$PATH" FM_FAKE_COMPOSER="$dir/composer" FM_FAKE_SENT="$sent" \
+    FM_FAKE_SWALLOW="$dir/.swallow" FM_FAKE_PERSIST_SWALLOW=1 FM_INJECT_CONFIRM_SLEEP=0.05 \
+    escalate_flush "$state"; then
+    fail "escalate_flush reported success on a swallowed Enter"
+  fi
+  digest=$(grep -F 'Supervisor escalate' "$sent")
+  full=$(printf '%s' "$digest" | sed -n 's/.*full text of every event: \([^ )]*\).*/\1/p')
+  [ -n "$full" ] && [ -f "$full" ] || fail "a typed bounded digest names a full-text file that was removed: $digest"
+  cmp -s "$full" "$dir/buffer.orig" || fail "kept full-text file does not hold the buffered event verbatim"
+  if LOG="$log" PATH="$fakebin:$PATH" FM_FAKE_COMPOSER="$dir/composer" FM_FAKE_SENT="$sent" \
+    FM_INJECT_CONFIRM_SLEEP=0.05 escalate_flush "$state"; then
+    fail "escalate_flush reported success while the composer still held the typed digest"
+  fi
+  [ -f "$full" ] || fail "a deferred retry removed the full-text file the typed digest names"
+  escalate_add "$state" "needs-decision: pick D"
+  if LOG="$log" PATH="$fakebin:$PATH" FM_FAKE_COMPOSER="$dir/composer" FM_FAKE_SENT="$sent" \
+    FM_INJECT_CONFIRM_SLEEP=0.05 escalate_flush "$state"; then
+    fail "escalate_flush reported success while the composer still held the typed digest"
+  fi
+  [ "$(ls -A "$state/.subsuper-digests")" = "$(basename "$full")" ] \
+    || fail "a deferral before any send must leave no new full-text file: $(ls -A "$state/.subsuper-digests")"
+  pass "a bounded digest's full-text file survives a failure after typing, and a deferral writes none"
 }
 
 test_below_max_defer_does_nothing() {
@@ -2989,6 +3027,7 @@ test_oversized_digest_is_bounded_and_kept_durable
 test_digest_budget_counts_omitted_events
 test_inject_send_failure_logs_stage_stderr_and_bytes
 test_inject_enter_failure_logs_confirmation_stage
+test_bounded_digest_full_text_kept_after_typing
 test_below_max_defer_does_nothing
 test_max_defer_afk_inactive_does_not_flush_or_alarm
 test_wedge_alarm_library_mode_defaults_to_discard
