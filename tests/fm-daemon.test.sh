@@ -2226,7 +2226,7 @@ test_inject_send_failure_logs_stage_stderr_and_bytes() {
     FM_FAKE_SEND_MAX_BYTES=100 FM_INJECT_CONFIRM_SLEEP=0.05 escalate_flush "$state"; then
     fail "escalate_flush reported success on a retried refused send"
   fi
-  [ "$(ls -A "$state/.subsuper-digests" | wc -l | tr -d ' ')" -eq 1 ] \
+  [ "$(find "$state/.subsuper-digests" -type f | wc -l | tr -d ' ')" -eq 1 ] \
     || fail "retrying an unchanged buffer must reuse one full-text file: $(ls -A "$state/.subsuper-digests")"
   WEDGE_ALARM_LAST_EPOCH=0
   LOG="$log" FM_WEDGE_ALARM_CHANNEL=off FM_SUPERVISOR_BACKEND=herdr inject_wedge_alarm "$state" 600
